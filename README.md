@@ -13,7 +13,7 @@ This project was created to *build skills* on API usage, and algorithms for data
   * Jobs will be maily focused on the cannabis industry.
   * Ability for jobs to be added "to the pile" - Eventually building up own database of jobs
 
-###Long Term Goals
+### Long Term Goals
   * User Profiles
   * Business Profiles
 
