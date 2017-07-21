@@ -1,0 +1,13 @@
+.site-body {
+	height: 1000px;
+	background: grey;
+}
+
+.search-area {
+	padding-top: 50px;
+}
+
+.display-wrapper {
+	width: 80%;
+	margin: 0 auto;
+}

@@ -1,0 +1,20 @@
+{
+  "name": "job-search-app",
+  "version": "1.0.0",
+  "description": "Job Search App API Server",
+  "main": "server.js",
+  "scripts": {
+    "start": "concurrently \"npm run server\" \"npm run front-end\"",
+    "server": "node server.js",
+    "front-end": "node start-front-end.js"
+  },
+  "author": "Kellan Martin",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.15.3",
+    "request": "^2.81.0"
+  },
+  "devDependencies": {
+    "concurrently": "^3.5.0"
+  }
+}

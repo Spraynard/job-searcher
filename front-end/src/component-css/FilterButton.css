@@ -1,0 +1,27 @@
+.filter-button {
+	background: transparent;
+	width: 50px;
+	height: 30px;
+	margin-left: 20px;
+	margin-right: 20px;
+	-webkit-transition: box-shadow 0.25s ease-in-out, background 0.25s;
+	   -moz-transition: box-shadow 0.25s ease-in-out, background 0.25s;
+	    -ms-transition: box-shadow 0.25s ease-in-out, background 0.25s;
+	     -o-transition: box-shadow 0.25s ease-in-out, background 0.25s;
+	     	transition: box-shadow 0.25s ease-in-out, background 0.25s;
+
+    -webkit-box-shadow: 0 0.25em 0.25em grey;
+	   -moz-box-shadow: 0 0.25em 0.25em grey;
+	        box-shadow: 0 0.25em 0.25em grey;
+}
+
+.filter-button.normal.active {
+	background: blue;
+    -webkit-box-shadow: 0 0.50em 0.50em grey;
+	   -moz-box-shadow: 0 0.50em 0.50em grey;
+	        box-shadow: 0 0.50em 0.50em grey;
+}
+
+.filter-button:focus {
+	outline: none;
+}

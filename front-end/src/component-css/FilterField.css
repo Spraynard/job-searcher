@@ -1,0 +1,25 @@
+.filter {
+	opacity: 0;
+	width: 90%;
+	height: 0px;
+	background: white;
+	text-align: center;
+	margin: 0 auto;
+	overflow-y: hidden;
+	-webkit-transition: height 0.5s, opacity 0.5s;
+	   -moz-transition: height 0.5s, opacity 0.5s;
+	    -ms-transition: height 0.5s, opacity 0.5s;
+	     -o-transition: height 0.5s, opacity 0.5s;
+	        transition: height 0.5s, opacity 0.5s;
+}
+
+.filter.active {
+	opacity: 1;
+	height: 100px;
+}
+
+.button-area {
+	margin-top: 15px;
+	justify-content: center;
+	display: flex;
+}
