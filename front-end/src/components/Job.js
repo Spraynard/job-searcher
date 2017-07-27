@@ -16,10 +16,10 @@ function Job(props) {
 
 	return (
 		<div className="job-entry">
-			<div className="job-title">
+			<div className="jTitle">
 				{title}
 			</div>
-			<div className="job-company">
+			<div className="jCompany">
 				{company}
 			</div>
 		</div>

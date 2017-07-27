@@ -1,0 +1,8 @@
+.job-display-area {
+	height: 800px;
+	overflow-y: hidden;
+}
+
+.breadcrumb-wrapper {
+	margin-top: 15px;
+}

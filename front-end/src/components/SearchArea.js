@@ -10,8 +10,9 @@ function SearchArea(props) {
 		<div className="search-area">
 			<form onSubmit={props.onFormSubmit}>
 				<div className="search">
-					<label>Search For Jobs</label>
+					<label>Search For Jobs
 					<input type="text" name="search-bar" className="search-bar" onChange={props.onSearchChange}/>
+					</label>
 					<input type="submit" value="Submit"/>
 					<FilterButton active={(filterState) ? 'active' : ''} color={'normal'} onClick={props.onFilterClick} text={'Filter Your Results!'} />				
 				</div>

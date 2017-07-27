@@ -47,7 +47,6 @@ class SiteBody extends Component {
 				return response.json();
 			})
 			.then(res => {
-				console.log(res)
 				this.setState({
 					jobList: res
 				})
@@ -92,7 +91,7 @@ class SiteBody extends Component {
 
 				/>
 				<div className="display-wrapper">
-					<DisplayArea jobList={this.state.jobList} searchTerm={this.state.searchTerm} filterList={this.state.activeFilters}/>
+					<DisplayArea jobList={this.state.jobList} filterList={this.state.activeFilters}/>
 				</div>
 			</div>
 		)

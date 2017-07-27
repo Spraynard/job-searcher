@@ -16,6 +16,7 @@ const request = require('request');
 const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
 const remoteData = require('./remote-api-helpers/remote-data');
+const jobObjectHelper = require('./remote-api-helpers/jobObjectHelper');
 const exec = require('child_process').exec;
 
 userAgentCmdLineFormatter = (user_agent) => {
@@ -69,6 +70,7 @@ makeRequest = (company, remoteObj, query = null) => {
 
 				request(usajobs_options, (err, resp, body) => {
 					responseObj.response = JSON.parse(body);
+					// console.log(responseObj.response.SearchResult.SearchResultItems)
 					// Send it away, it's good
 					resolve(responseObj);
 				})
@@ -91,70 +93,62 @@ makeRequest = (company, remoteObj, query = null) => {
 }
 
 handleResponse = (resObj) => {
+	var _jobList = []
 	return new Promise( ( resolve, reject ) => {
-		const jobObjectTemplate = { remote: null, title: null, company: null, description: null, extWebsite: null, titleLink: null, startDate: null,
-									endDate: null, location: { name: null, latitude: null, longitude: null },
-									compensation: { minimum: null, maximum: null, salary: null, rate: null } }
-
-		let resItems = null
-		let _jobList = []
-
 		if (typeof resObj === 'object') {
 			let res = resObj.response;
-			let jO = jobObjectTemplate;
+			let company = resObj.company;
 
-			switch (resObj.company) {
-				case 'USAJOBS':
-					resItems = res.SearchResult.SearchResultItems;
-					jO.remote = 'USA Jobs'
+			if (company === 'USAJOBS') {
+				let resItems = res.SearchResult.SearchResultItems;
+				resItems.forEach((item) => {
+					let  jO = jobObjectHelper.template();
+
+					let jMeta = item.MatchedObjectDescriptor;
+					let jLoc = jMeta.PositionLocation[0];
+					let jComp = jMeta.PositionRemuneration[0];
 					
-					resItems.forEach((item) => {
-						const jMeta = item.MatchedObjectDescriptor;
-						const jLoc = jMeta.PositionLocation[0];
-						const jComp = jMeta.PositionRemuneration[0];
+					jO.remote = 'USA Jobs';
+					jO.title = jMeta.PositionTitle;
+					jO.company = jMeta.OrganizationName;
+					jO.description = jMeta.QualificationSummary;
+					jO.titleLink = jMeta.ApplyURI[0];
+					jO.startDate = jMeta.PositionStartDate;
+					jO.endDate = jMeta.PositionEndDate;
+					jO.location.name = jLoc.LocationName;
+					jO.location.latitude = jLoc.Latitude;
+					jO.location.longitude = jLoc.Longitude;
+					jO.compensation.minimum = jComp.MinimumRange;
+					jO.compensation.maximum = jComp.MaximumRange;
+					jO.compensation.rate = jComp.RateIntervalCode;
 
-						jO.title = jMeta.PositionTitle;
-						jO.company = jMeta.OrganizationName;
-						jO.description = jMeta.QualificationSummary;
-						jO.titleLink = jMeta.ApplyURI[0];
-						jO.startDate = jMeta.PositionStartDate;
-						jO.endDate = jMeta.PositionEndDate;
-						jO.location.name = jLoc.LocationName;
-						jO.location.latitude = jLoc.Latitude;
-						jO.location.longitude = jLoc.Longitude;
-						jO.compensation.minimum = jComp.MinimumRange;
-						jO.compensation.maximum = jComp.MaximumRange;
-						jO.compensation.rate = jComp.RateIntervalCode;
+					_jobList.push(jO)
+				})
+				resolve(_jobList)
+			} else if (company === 'CAREERJET') {
+				let resItems = res.jobs
+				resItems.forEach((item) => {
+					let jO = jobObjectHelper.template();
 
-						_jobList.push(jO)
-					})
-					console.log(_jobList)
-					resolve(_jobList)
-					break
-				case 'CAREERJET':
 					jO.remote = 'Careerjet'
-					resItems = res.jobs
-					resItems.forEach((item) => {
-						jO.title = item.title;
-						jO.company = item.company;
-						jO.description = item.description;
-						jO.titleLink = item.url;
-						jO.extWebsite = item.sites;
-						jO.startDate = item.date;
-						jO.location.name = item.locations;
-						jO.compensation.salary = (item.salary === '') ? null : item.salary;
+					jO.title = item.title;
+					jO.company = item.company;
+					jO.description = item.description;
+					jO.titleLink = item.url;
+					jO.extWebsite = item.sites;
+					jO.startDate = item.date;
+					jO.location.name = item.locations;
+					jO.compensation.salary = (item.salary === '') ? null : item.salary;
 
-						_jobList.push(jO)
-					})
-					console.log(_jobList)
-					resolve(_jobList)
-					break
-				case 'default':
-					reject("Don't know what you're putting in")
-					break
+					_jobList.push(jO)
+				})
+				
+				resolve(_jobList)
+			} else {
+				reject("Don't have a set-up for that company")
 			}
 		} else {
-			reject(`You are giving the 'handleResponse' function a ${typeof resObj}`)
+			reject("You are not inputting an object into this mf")
 		}
 	})
 }
