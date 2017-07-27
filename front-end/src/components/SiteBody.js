@@ -46,12 +46,11 @@ class SiteBody extends Component {
 			.then(response => {
 				return response.json();
 			})
-			.then(json => {
-				console.log(json);
-				console.log(json.SearchResult);
-				for (var r in json.SearchResult.SearchResultItems) {
-					console.log(json.SearchResult.SearchResultItems[r].MatchedObjectDescriptor)
-				}
+			.then(res => {
+				console.log(res)
+				this.setState({
+					jobList: res
+				})
 			})
 			.then(null, console.error);
 	}

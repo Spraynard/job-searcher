@@ -22,7 +22,7 @@ import json
 cj = CareerjetAPIClient("en_US")
 IP = sys.argv[1]
 USER_AGENT = (" ").join(sys.argv[2].replace('*', '(').replace('+', ')').replace('^', ';').split('-'))
-AFFILIATE_ID = '12675a3a68f21b112085faa208e88b9d'
+AFFILIATE_ID = sys.argv[5] #'12675a3a68f21b112085faa208e88b9d'
 URL = sys.argv[3]
 KEYWORDS = sys.argv[4]
 

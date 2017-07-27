@@ -1,4 +1,6 @@
 # See https://help.github.com/ignore-files/ for more about ignoring files.
+# individual files - custom
+/routes/remote-api-helpers/remote-data.js
 
 # dependencies
 node_modules

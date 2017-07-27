@@ -1,5 +1,4 @@
 const exec = require('child_process').exec;
-const path = require('path');
 const USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36';
 let F_USER_AGENT = USER_AGENT.replace(/[();]/g, match => {
 	switch (match) {

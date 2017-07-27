@@ -4,8 +4,8 @@ import Job from './Job.js';
 
 class DisplayArea extends Component {
 	// This is the area that jobs are displayed in.
-	renderJob() {
-		return <Job />
+	renderJob(id, _obj, index) {
+		return <Job key={id} data={_obj} />
 	}
 
 	render() {
@@ -13,7 +13,8 @@ class DisplayArea extends Component {
 		let searchTerm = this.props.searchTerm
 		let filterList = this.props.filterList
 		this.props.jobList.map((value, index) => {
-			return jobBucket.push(this.renderJob())
+			let id = `job-info-${index}`
+			return jobBucket.push(this.renderJob(id, value, index))
 		})
 
 		return (
