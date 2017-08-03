@@ -1,0 +1,390 @@
+.job-entry {
+  font-family: sans-serif;
+  background: #A6B491;
+  position: relative;
+  overflow-y: hidden;
+  -webkit-transition: all 0.4s ease-out;
+     -moz-transition: all 0.4s ease-out;
+      -ms-transition: all 0.4s ease-out;
+       -o-transition: all 0.4s ease-out;
+          transition: all 0.4s ease-out;
+}
+
+.jHeader {
+  height: 40%;
+  width: 100%;
+}
+
+.jHeader-content {
+  position: relative;
+  background: #FEE6A7;
+  width: 96%;
+  height: 100%;
+  padding-left: 1%;
+  margin: 2% auto;
+  -webkit-box-shadow: 0 5px 4px #105D2A;
+     -moz-box-shadow: 0 5px 4px #105D2A;
+          box-shadow: 0 5px 4px #105D2A;
+}
+
+.jRemote {
+  position: absolute;
+  right: 0;
+  width: 20%;
+}
+
+.jRemote img {
+  width: 100%;
+}
+
+.jTitle {
+  font-size: 1.25em;
+  font-weight: bold;
+}
+
+.jCompany, .jLocation {
+  display: inline-block;
+}
+
+.jCompany {
+  width: 40%;
+  font-size: .90em;
+}
+
+.jLocation {
+  width: 40%;
+  font-size: 0.80em;
+}
+
+.jLocation-icon {
+  display: inline-block;
+  width: 12%;
+  margin-right: 5px;
+}
+
+.jLocation-icon img {
+  width: 100%;
+}
+
+.jComp {
+  font-size: 0.80em;
+}
+
+.jComp .jComp-salary-icon {
+  width: 5%;
+  display: inline-block;
+  margin-right: 5px;
+}
+
+.jComp .jComp-salary-icon img {
+  width: 100%;
+}
+
+.jBody {
+  width: 100%;
+  margin-top: 2%;
+  margin-bottom: 2%;
+}
+
+.body-column-1 {
+  width: 78%;
+  display: inline-block;
+  height: 88%;
+  margin-left: 1.5%;
+  background: #D2DEC6;
+/*   -webkit-box-shadow: 0 5px 4px #105D2A;
+     -moz-box-shadow: 0 5px 4px #105D2A;
+          box-shadow: 0 5px 4px #105D2A; */
+}
+
+.jDescription {
+  padding-left: 2%;
+  padding-right: 2%;
+  line-height: 1.5;
+  height: 100%;
+  overflow: auto;
+}
+
+.tiny-spacer {
+  height: .5em;
+  width: 100%;
+}
+
+.spacer {
+  height: 3em;
+  width: 100%;
+}
+
+.jDescription::-webkit-scrollbar {
+  width: 0.5em;
+}
+
+.jDescription::-webkit-scrollbar-track {
+  background: #477413;
+  border-left: 0.25em solid #D2DEC6;
+  border-right: 0.05em solid #D2DEC6;
+}
+
+.jDescription::-webkit-scrollbar-thumb { 
+  background-color: #5F4E60;
+  border-left: 0.15em solid #D2DEC6;
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+}
+
+.jDates .date-string {
+  font-size: 0.75em;
+}
+
+.jDates .date-header {
+  font-size: 0.9em;
+  font-weight: 700;
+}
+
+.jDates .jDates-icon {
+  width: 5%;
+  display: inline-block;
+  margin-right: 5px;
+}
+
+.jDates .jDates-icon img {
+  width: 100%;
+}
+
+.body-column-2 {
+  width: 20%;
+  vertical-align: top;
+  display: inline-block;
+}
+
+.body-column-2 div {
+  -webkit-box-shadow: 0 3px 2px #105D2A;
+     -moz-box-shadow: 0 3px 2px #105D2A;
+          box-shadow: 0 3px 2px #105D2A;
+  -webkit-transition: box-shadow 0.1s ease-out, width 0.1s ease-out, font 0.1s ease;
+     -moz-transition: box-shadow 0.1s ease-out, width 0.1s ease-out, font 0.1s ease;
+      -ms-transition: box-shadow 0.1s ease-out, width 0.1s ease-out, font 0.1s ease;
+       -o-transition: box-shadow 0.1s ease-out, width 0.1s ease-out, font 0.1s ease;
+          transition: box-shadow 0.1s ease-out, width 0.1s ease-out, font 0.1s ease;
+}
+
+.body-column-2 div:active {
+  outline: none;
+  font-size: 0.60em;
+  width: 88%;
+  -webkit-box-shadow: 0 2px 1px #105D2A !important;
+     -moz-box-shadow: 0 2px 1px #105D2A !important;
+          box-shadow: 0 2px 1px #105D2A !important;
+}
+
+.body-column-2 div:hover {
+  -webkit-box-shadow: 0 5px 4px #105D2A;
+     -moz-box-shadow: 0 5px 4px #105D2A;
+          box-shadow: 0 5px 4px #105D2A;
+}
+
+.job-entry input {
+  width: 100%;
+  height: 35px;
+  font-size: inherit;
+  background: #5F4E60;
+  border: none;
+  color: white;
+  border-radius: 2px;
+  font-weight: bold;
+}
+
+.body-column-2 div input:focus {
+  outline: none;
+}
+
+.body-column-2.full div:not(:first-child):not(:last-child) {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+.body-column-2.partial div:first-child {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+@media screen and (min-width: 375px) {
+  
+  .small-screen-activate {
+    display: block;
+    margin: 0 auto;
+    width: 40% !important;
+    font-size: 0.75em !important;
+  }
+  
+  .display-wrapper {
+    width: 95%;
+  }
+  
+  .job-entry {
+    margin: 1% 1%;
+    width: 100%;
+    border-radius: 3px;
+    display: inline-block;
+    height: auto;
+  }
+  
+  .jHeader {
+    height: auto;
+  }
+  
+  .jHeader-content {
+    min-height: 123px;
+    padding-bottom: 5px;
+  }
+  
+  .jTitle {
+    width: 80%;
+    font-size: 1em;
+  }
+  
+  .jCompany, .jLocation {
+    font-size: 0.75em;
+    vertical-align: top;
+    margin-bottom: 5px;
+  }
+  
+  .jComp {
+    margin-bottom: 5px;
+  }
+  
+  .jDates {
+    margin-bottom: 5px;
+  }
+
+  .body-column-1 {
+    width: 97%;
+  }
+  
+  .jDescription {
+    max-height: 200px;
+    display: block;
+  }
+  
+  .body-column-2 {
+    display: block;
+    width: 80%;
+    margin: 1% auto 0.5% auto;
+    text-align: center;
+    font-size: 1em;
+  }
+  
+  .body-column-2 div {
+    width: 48%;
+    display: inline-block;
+    margin-left: 1%;
+    margin-right: 1%
+  }
+  
+  .body-column-2 div:first-child {
+    display: none;
+  }
+  
+  .body-column-2.full div:not(:first-child):not(:last-child) {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+}
+@media screen and (min-width: 576px) {
+  
+}
+@media screen and (min-width: 768px) {
+
+  .small-screen-activate {
+    display: none;
+  }
+    
+  .job-entry {
+      margin: 1% 1%;
+      width: 48%;
+      border-radius: 3px;
+/*     height: 275px; */
+  }
+
+  .jComp {
+    width: 78%
+  }
+  
+  .jDescription {
+    height: 128px;
+  }
+  
+  .body-column-1 {
+      width: 78%;
+      display: inline-block;
+      height: 88%;
+      margin-left: 1.5%;
+      background: #D2DEC6;
+    }
+  
+  .body-column-2 {
+    width: 20%;
+    vertical-align: top;
+    display: inline-block;
+    margin: 0 auto;
+    font-size: .20em
+  }
+  
+  .body-column-2 div {
+    width: 90%;
+    margin: 0 auto;
+  }
+  
+  .body-column-2 div:first-child {
+    display: block;
+  }
+  
+  .body-column-2.full div:not(:first-child):not(:last-child) {
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+}
+@media screen and (min-width: 992px) {
+  .jRemote {
+    width: 15%;
+  }  
+}
+
+@media screen and (min-width: 1200px) {
+  
+  .jBody {
+    height: auto;
+  }
+  
+  .jDescription {
+    height: 128px;
+  }
+  
+  .body-column-1 {
+    height: auto;
+  }
+  
+  .body-column-2 {
+    font-size: 0.67em;
+  }
+  
+  .job-entry.active {
+    width: 100%;
+  }
+
+  .job-entry.active .jRemote {
+    width: 15%;
+  }
+  .job-entry.active .jLocation-icon {
+    width: 8%;
+  }
+  .job-entry.active .jComp .jComp-salary-icon {
+    width: 3%;
+  }
+  .job-entry.active .jDates .jDates-icon {
+    width: 3%;
+  }
+  
+  .job-entry.active .jDescription {
+    height: auto;
+  }
+}

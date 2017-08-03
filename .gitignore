@@ -1,6 +1,9 @@
 # See https://help.github.com/ignore-files/ for more about ignoring files.
 # individual files - custom
 /routes/remote-api-helpers/remote-data.js
+mysql_setup.js
+routes/remote-api-helpers/createTestDB.js
+routes/remote-api-helpers/testHelpers.js
 
 # dependencies
 node_modules

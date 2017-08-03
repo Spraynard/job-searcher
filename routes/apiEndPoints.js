@@ -15,9 +15,13 @@ const router = express.Router();
 const request = require('request');
 const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
+const urlParser = bodyParser.urlencoded({extended: false})
 const remoteData = require('./remote-api-helpers/remote-data');
 const jobObjectHelper = require('./remote-api-helpers/jobObjectHelper');
+const testHelper = require('./remote-api-helpers/testHelpers');
 const exec = require('child_process').exec;
+// Used at first for building the test array
+const mysql = require('../mysql_setup.js');
 
 userAgentCmdLineFormatter = (user_agent) => {
 	// Summary: Takes in a request's user agent, and formats it
@@ -183,10 +187,6 @@ myConcat = (array, index = 0, _array = []) => {
 }
 
 router.get('/test-call', (req, res, next) => {
-	res.send("Hey there how are you?")
-})
-
-router.get('/job-search', jsonParser, (req, res, next) => {
 	let remotes = remoteData.initialRemoteData()
 	let promiseArray = [];
 	let params = req.params;
@@ -200,11 +200,55 @@ router.get('/job-search', jsonParser, (req, res, next) => {
 
 	Promise.all(promiseArray).then(values => {
 		let new_values = myConcat(values)
-		res.json(new_values);
-	}).catch( error => {
-		console.error(error)
+		// mysql db connection
+		new_values.map(( value, index ) => {
+			let connection = mysql.getConn
+			connection.query(`INSERT INTO test_jobs VALUES (null,
+				?, ?, ?, ?, ?,
+				?, ?, ?, ?, ?,
+				?, ?, ?, ?, ?)`,
+				[value.remote, value.title,
+				 value.company, value.description,
+				 value.extWebsite, value.titleLink,
+				 value.startDate, value.endDate,
+				 value.location.name, value.location.latitude,
+				 value.location.longitude, value.compensation.minimum,
+				 value.compensation.maximum, value.compensation.salary,
+				 value.compensation.rate], (err, results, fields) => {
+					console.log(results);
+				})
+			})
+		}).catch( error => {
+			console.error(error)
 	})
+})
 
+router.get('/job-search', urlParser, (req, res, next) => {
+	let params = req.query;
+	if (params.test) {
+		let connection = mysql.getConn;
+		connection.query('SELECT * FROM test_jobs', (err, results, fields) => {
+			let returnArray = testHelper.buildJobObjects(results)
+			res.json(returnArray)
+		})
+	} else {
+		let remotes = remoteData.initialRemoteData()
+		let promiseArray = [];
+		const query = 'Computers'
+
+		for (var i = 0; i < Object.keys(remotes).length; i++) {
+			let company = Object.keys(remotes)[i];
+			let promise = makeRequest(company, getRemoteObj(req, company, remotes), query).then(handleResponse)
+			promiseArray.push(promise);
+		}
+
+		Promise.all(promiseArray).then(values => {
+			let new_values = myConcat(values)
+			res.json(new_values);
+		}).catch( error => {
+			console.error(error)
+		})
+	}
 })
 
 module.exports = router;

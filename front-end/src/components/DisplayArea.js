@@ -10,6 +10,7 @@ class DisplayArea extends Component {
 		this.state = {
 			displayIndex: null,
 			amtPerPage: null,
+			jobActive: false
 		};
 	}
 
@@ -23,12 +24,33 @@ class DisplayArea extends Component {
 	renderJob(id, _obj, index) {
 		// Summary: returns a job object with given parameters
 		// Input: `id` - 
-		return <Job key={id} data={_obj} />
+		return (
+			<Job 
+				key={id} 
+				data={_obj}
+				onClick={() => this.toggleJobActive()}
+				anotherActive={this.state.jobActive}
+			/>
+		)
 	}
 
 	setDisplayIndex(e) {
-		console.log(e.target.getAttribute('value'))
-		console.log(`Hello it's a me! This is the value ${e.target.value}`)
+		const displayIndex = this.state.displayIndex;
+		const value = e.target.getAttribute('value');
+		const displayAmt = this.state.amtPerPage;
+		if (((value - 1) * displayAmt) === displayIndex) {
+			return null;
+		}
+		let newIndex = ((value - 1) * displayAmt)//(value === 1) ? 0 : (((value - 1) * displayAmt))
+		this.setState({
+			displayIndex: newIndex
+		})
+	}
+
+	toggleJobActive() {
+		this.setState({
+			jobActive: this.state.jobActive ? false : true
+		});
 	}
 
 	renderBreadcrumb(id, index) {
@@ -43,9 +65,8 @@ class DisplayArea extends Component {
 	render() {
 		let jobBucket = [];
 		let breadCrumbBucket = [];
-		let filterList = this.props.filterList
+		let activeFilterList = this.props.filterList;
 		let jobList = this.props.jobList
-		let breadcrumbs = "Yay Breadcrumbs!!!"
 
 		// Building the breadcrumb bucket.
 		for (var i = 0; i < Math.ceil(jobList.length/this.state.amtPerPage); i++) {
@@ -53,22 +74,21 @@ class DisplayArea extends Component {
 			breadCrumbBucket.push(this.renderBreadcrumb(id, i + 1))
 		}
 		// Builing the jobBucket
-		let reducedJobList = this.props.jobList.slice(this.state.displayIndex, this.state.displayIndex + this.state.amtPerPage)
+		let reducedJobList = this.props.jobList.slice(this.state.displayIndex, (this.state.displayIndex + this.state.amtPerPage))
 		reducedJobList.map((value, index) => {
 			let id = `job-info-${index}`
 			return jobBucket.push(this.renderJob(id, value, index))
 		})
-
 		return (
 			<div className="display-area">
 				<div className="filter-list">
-					{filterList}
+					{activeFilterList}
 				</div>
 				<div className="job-display-area">
 					{jobBucket}
-					<div className="breadcrumb-wrapper">
-						{breadCrumbBucket}
-					</div>
+				</div>
+				<div className="breadcrumbs-wrapper">
+					{breadCrumbBucket}
 				</div>
 			</div>
 		)

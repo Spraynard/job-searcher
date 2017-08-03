@@ -1,8 +1,15 @@
-.job-display-area {
-	height: 800px;
-	overflow-y: hidden;
+.display-area {
+	position: relative;
 }
 
-.breadcrumb-wrapper {
-	margin-top: 15px;
+.job-display-area {
+	min-height: 700px;
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.breadcrumbs-wrapper {
+	width: 100%;
+	bottom: 50px;
+	text-align: center;
 }

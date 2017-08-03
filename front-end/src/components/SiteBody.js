@@ -42,7 +42,7 @@ class SiteBody extends Component {
 		// const filter = this.state.activeFilters;
 		// console.log("Search Term:", term, "Filter:", filter)
 		
-		fetch('/api/job-search')
+		fetch('/api/job-search?test=true')
 			.then(response => {
 				return response.json();
 			})
