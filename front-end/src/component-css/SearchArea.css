@@ -3,8 +3,9 @@
 }
 
 .search {
-	height: 150px;
+	height: auto;
 	text-align: center;
+	margin-bottom: 15px;
 }
 
 .search input[type="text"] {
@@ -12,17 +13,11 @@
 	height: 2em;
 	font-size: 1em;
 	margin-top: 10px;
-	margin-left: 10px;
 }
 
-.search input[type="submit"] {
-	display: block;
-	height: 38px;
-	width: 20%;
-	font-size: 1em;
-	background: transparent;
-	margin: 10px auto 10px auto;
-
+.search .input-div input,
+.search .submit-div input {
+	color: white;
 }
 
 .search .filter-button {
@@ -32,10 +27,35 @@
 	font-size: 1em;
 }
 
-@media screen and (min-width: 415px) {
-	.search input[type="submit"] {
+@media screen and (min-width: 375px) {
+	.search .input-div input,
+	.search .submit-div input {
+		height: 38px;
+		width: 50%;
+		background: #5F4E60;
+		font-size: inherit !important;
+		margin: 10px auto 10px auto;
+		border: none;
+		border-radius: 3px;
+	}
+}
+
+@media screen and (min-width: 576px) {
+	.search input[type="text"] {
+		width: 50%;
 		display: inline-block;
-		width: auto;
-		margin: 0 0 0 10px;
+	}
+
+	.search .submit-div {
+		vertical-align: top;
+		display: inline-block;
+		width: 20%;
+	}
+
+	.search .submit-div input {
+		width: 100%;
+		border-radius: none;
+		border-top-right-radius: 3px;
+		border-bottom-right-radius: 3px;
 	}
 }

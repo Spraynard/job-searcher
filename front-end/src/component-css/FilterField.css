@@ -16,10 +16,23 @@
 .filter.active {
 	opacity: 1;
 	height: 100px;
+	margin-bottom: 10px;
 }
 
 .button-area {
 	margin-top: 15px;
 	justify-content: center;
 	display: flex;
+}
+
+@media screen and (min-width: 375px) {
+	.filter {
+		width: 93%;
+	}
+}
+
+@media screen and (min-width: 576px) {
+	.filter {
+		width: 90%;
+	}
 }

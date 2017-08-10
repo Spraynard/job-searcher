@@ -23,6 +23,14 @@ const exec = require('child_process').exec;
 // Used at first for building the test array
 const mysql = require('../mysql_setup.js');
 
+const createDOMPurify = require('dompurify');
+const { JSDOM } = require('jsdom');
+
+const window = (new JSDOM('')).window;
+const DOMPurify = createDOMPurify(window);
+
+
+
 userAgentCmdLineFormatter = (user_agent) => {
 	// Summary: Takes in a request's user agent, and formats it
 	// 			so it can be taken in as an `exec` command line argument.
@@ -43,7 +51,7 @@ userAgentCmdLineFormatter = (user_agent) => {
 	);
 }
 
-makeRequest = (company, remoteObj, query = null) => {
+makeRequest = (source, remoteObj, query = null) => {
 	// Summary: Makes requests to specific company apis.
 	// Input: `company` - The company with a specific API.
 	// 		  `remoteObj` - The object containing all necessary information
@@ -53,14 +61,14 @@ makeRequest = (company, remoteObj, query = null) => {
 	// Returns: A promise - Resolved with infomation of API call, or rejected
 	// 							with an error.
 	let responseObj = {
-		company: null,
+		source: null,
 		response: null
 	}
 
 	return new Promise(( resolve, reject ) => {
-		switch (company) {
+		switch (source) {
 			case 'USAJOBS':
-				responseObj.company = 'USAJOBS';
+				responseObj.source = 'USAJOBS';
 
 				const usajobs_options = {
 					url : remoteObj['url'] + '?Keyword=' + query,
@@ -80,7 +88,7 @@ makeRequest = (company, remoteObj, query = null) => {
 				})
 				break
 			case 'CAREERJET':
-				responseObj.company = 'CAREERJET';
+				responseObj.source = 'CAREERJET';
 
 				exec(`python routes/remote-api-helpers/career_jet_api_search.py ${remoteObj.url} ${userAgentCmdLineFormatter(remoteObj.user_agent)} ${remoteObj.url} ${query} ${remoteObj.auth_key}`,
 					(err, stdout, stderr) => {
@@ -97,13 +105,15 @@ makeRequest = (company, remoteObj, query = null) => {
 }
 
 handleResponse = (resObj) => {
+	/* Summary: Handles the response of the multiple API/DB calls that are going to take place with this app
+	 * Input: `resObj` - The response taken from the API call.*/
 	var _jobList = []
 	return new Promise( ( resolve, reject ) => {
 		if (typeof resObj === 'object') {
 			let res = resObj.response;
-			let company = resObj.company;
+			let source = resObj.source;
 
-			if (company === 'USAJOBS') {
+			if (source === 'USAJOBS') {
 				let resItems = res.SearchResult.SearchResultItems;
 				resItems.forEach((item) => {
 					let  jO = jobObjectHelper.template();
@@ -114,8 +124,8 @@ handleResponse = (resObj) => {
 					
 					jO.remote = 'USA Jobs';
 					jO.title = jMeta.PositionTitle;
-					jO.company = jMeta.OrganizationName;
-					jO.description = jMeta.QualificationSummary;
+					jO.source = jMeta.OrganizationName;
+					jO.description = DOMPurify.sanitize(jMeta.QualificationSummary);
 					jO.titleLink = jMeta.ApplyURI[0];
 					jO.startDate = jMeta.PositionStartDate;
 					jO.endDate = jMeta.PositionEndDate;
@@ -129,15 +139,15 @@ handleResponse = (resObj) => {
 					_jobList.push(jO)
 				})
 				resolve(_jobList)
-			} else if (company === 'CAREERJET') {
+			} else if (source === 'CAREERJET') {
 				let resItems = res.jobs
 				resItems.forEach((item) => {
 					let jO = jobObjectHelper.template();
 
 					jO.remote = 'Careerjet'
 					jO.title = item.title;
-					jO.company = item.company;
-					jO.description = item.description;
+					jO.source = item.source;
+					jO.description = DOMPurify.sanitize(item.description);
 					jO.titleLink = item.url;
 					jO.extWebsite = item.sites;
 					jO.startDate = item.date;
@@ -176,11 +186,11 @@ getRemoteObj = (req, company, remotes) => {
 	return remO
 }
 
-myConcat = (array, index = 0, _array = []) => {
+arrayConcat = (array, index = 0, _array = []) => {
 	if (index < array.length) {
 		let new_array = _array.concat(array[index]);
 		let new_index = index + 1
-		return myConcat(array, new_index , new_array)		
+		return arrayConcat(array, new_index , new_array)		
 	} else {
 		return _array;
 	}
@@ -199,7 +209,7 @@ router.get('/test-call', (req, res, next) => {
 	}
 
 	Promise.all(promiseArray).then(values => {
-		let new_values = myConcat(values)
+		let new_values = arrayConcat(values)
 		// mysql db connection
 		new_values.map(( value, index ) => {
 			let connection = mysql.getConn
@@ -225,6 +235,8 @@ router.get('/test-call', (req, res, next) => {
 
 router.get('/job-search', urlParser, (req, res, next) => {
 	let params = req.query;
+	/* The `test` param is given in the front-end code, most
+		likely in `siteBody.js` */
 	if (params.test) {
 		let connection = mysql.getConn;
 		connection.query('SELECT * FROM test_jobs', (err, results, fields) => {
@@ -237,13 +249,13 @@ router.get('/job-search', urlParser, (req, res, next) => {
 		const query = 'Computers'
 
 		for (var i = 0; i < Object.keys(remotes).length; i++) {
-			let company = Object.keys(remotes)[i];
-			let promise = makeRequest(company, getRemoteObj(req, company, remotes), query).then(handleResponse)
+			let source = Object.keys(remotes)[i];
+			let promise = makeRequest(source, getRemoteObj(req, source, remotes), query).then(handleResponse)
 			promiseArray.push(promise);
 		}
 
 		Promise.all(promiseArray).then(values => {
-			let new_values = myConcat(values)
+			let new_values = arrayConcat(values)
 			res.json(new_values);
 		}).catch( error => {
 			console.error(error)

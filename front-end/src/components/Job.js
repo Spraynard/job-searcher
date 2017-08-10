@@ -52,7 +52,7 @@ function Description(props) {
 	return (
 		<div className="jDescription">
       <div className="tiny-spacer"></div>
-			  {props.text}
+      <div className="jDescription-content" dangerouslySetInnerHTML={{__html: props.text}}></div>
       <div className="spacer"></div>
 		</div>
 	)
@@ -77,6 +77,7 @@ class Job extends Component {
   
   toggleStateMaster() {
     if (this.props.anotherActive && !this.state.isActive) {
+      alert("There is already a job with its description open! Please close it to look at another description.");
       return null
     } else {
       this.props.onClick()
@@ -87,7 +88,8 @@ class Job extends Component {
   render() {
 
     let jData = this.props.data;
-    let	remote = "Remote" //getImgLink(jData.remote);
+    let	remote = jData.remote;
+    let remoteImg; /*getImgLink(jData.remote)*/
     let	title = jData.title;
     let title_link = jData.titleLink
     let start_date = jData.startDate
@@ -106,14 +108,16 @@ class Job extends Component {
     let display_type = (ext_website) ? 'full' : 'partial'
     let dynamicDisplayColumn = `body-column-2 ${display_type}`
     let jobClasses = `job-entry ${this.state.isActive ? 'active' : ''}`
+    let viewMoreInfoButtonText = this.state.isActive ? 'CLOSE' : 'MORE INFO'
     let viewChangeButtonText = this.state.isActive ?  'SMALL VIEW' : 'LARGE VIEW'
+    let remoteText = `Job Obtained From ${remote}`
 
     return (
       <div className={jobClasses}>
           <div className="jHeader">
             <div className="jHeader-content">
               <div className="jRemote">
-                <img src={remote} alt="Job Obtained From..."/>
+                <img src={remoteImg} alt={remoteText}/>
               </div>
               <div className="jTitle">
                 {title}
@@ -137,7 +141,9 @@ class Job extends Component {
                 sDate={start_date}
                 eDate={end_date}
               />
-            <input className="small-screen-activate" type='button' onClick={() => this.toggleStateMaster()} value='SHOW MORE INFO'/>
+              <div className="small-screen-activate">
+                <input type='button' onClick={() => this.toggleStateMaster()} value={viewMoreInfoButtonText}/>
+              </div>
             </div>
         </div>
           <div className="jBody">

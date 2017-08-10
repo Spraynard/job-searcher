@@ -10,16 +10,16 @@
 	     -o-transition: box-shadow 0.25s ease-in-out, background 0.25s;
 	     	transition: box-shadow 0.25s ease-in-out, background 0.25s;
 
-    -webkit-box-shadow: 0 0.25em 0.25em grey;
-	   -moz-box-shadow: 0 0.25em 0.25em grey;
-	        box-shadow: 0 0.25em 0.25em grey;
+    -webkit-box-shadow: 0 0.50em 0.50em #2E1C2F;
+	   -moz-box-shadow: 0 0.50em 0.50em #2E1C2F;
+	        box-shadow: 0 0.50em 0.50em #2E1C2F;
 }
 
 .filter-button.normal.active {
-	background: blue;
-    -webkit-box-shadow: 0 0.50em 0.50em grey;
-	   -moz-box-shadow: 0 0.50em 0.50em grey;
-	        box-shadow: 0 0.50em 0.50em grey;
+	background: #443545;
+    -webkit-box-shadow: 0 0.25em 0.25em #2E1C2F;
+	   -moz-box-shadow: 0 0.25em 0.25em #2E1C2F;
+	        box-shadow: 0 0.25em 0.25em #2E1C2F;
 }
 
 .filter-button:focus {

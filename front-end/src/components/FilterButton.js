@@ -6,9 +6,7 @@ function FilterButton(props) {
 	const classes = `filter-button ${props.color} ${props.active}`
 
 	return (
-		<button type="button" className={classes} onClick={props.onClick} value={text}>
-			{text}
-		</button>
+		<input type="button" className={classes} onClick={props.onClick} value={text}/>
 	);
 }
 
