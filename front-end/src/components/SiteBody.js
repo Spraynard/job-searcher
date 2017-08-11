@@ -34,15 +34,19 @@ class SiteBody extends Component {
 		}
 	}
 
+	urlTheTerms(terms) {
+		return terms.split(' ').join('-');
+	}
+
 	handleSearch() {
 		// This is where searches are sent to backend API
 		// 		currently in construction.
 	
-		// const term = this.state.searchTerm;
+		const terms = this.state.searchTerm;
 		// const filter = this.state.activeFilters;
 		// console.log("Search Term:", term, "Filter:", filter)
-		
-		fetch('/api/job-search?test=true')
+		const keywords = this.urlTheTerms(terms);
+		fetch(`/api/jobs?keywords=${keywords}`)
 			.then(response => {
 				return response.json();
 			})

@@ -52,22 +52,24 @@ userAgentCmdLineFormatter = (user_agent) => {
 }
 
 makeRequest = (source, remoteObj, query = null) => {
-	// Summary: Makes requests to specific company apis.
-	// Input: `company` - The company with a specific API.
-	// 		  `remoteObj` - The object containing all necessary information
-	// 							for the company API to work and return data
-	// 		  `query` - The query string given from the front end. Used to
-	// 						filter information from APIs
-	// Returns: A promise - Resolved with infomation of API call, or rejected
-	// 							with an error.
+// Summary: Makes requests to specific company apis.
+// Input: `company` - The company with a specific API.
+// 		  `remoteObj` - The object containing all necessary information
+// 							for the company API to work and return data
+// 		  `query` - The query string given from the front end. Used to
+// 						filter information from APIs
+// Returns: A promise - Resolved with infomation of API call, or rejected
+// 							with an error.
 	let responseObj = {
 		source: null,
 		response: null
 	}
 
 	return new Promise(( resolve, reject ) => {
+
 		switch (source) {
 			case 'USAJOBS':
+				query = query.split('&').join(';');
 				responseObj.source = 'USAJOBS';
 
 				const usajobs_options = {
@@ -88,12 +90,16 @@ makeRequest = (source, remoteObj, query = null) => {
 				})
 				break
 			case 'CAREERJET':
+				console.log("Query before split: ", query);
+				query = query.split('&').join(',');
+				console.log("Career Jet Query: ", query);
 				responseObj.source = 'CAREERJET';
 
 				exec(`python routes/remote-api-helpers/career_jet_api_search.py ${remoteObj.url} ${userAgentCmdLineFormatter(remoteObj.user_agent)} ${remoteObj.url} ${query} ${remoteObj.auth_key}`,
 					(err, stdout, stderr) => {
-						if (err) rej(err);
+						if (err) reject(err);
 						// console.log('stdout:', stdout, 'stderr:', stderr);
+						console.log("This is stdout", stdout);
 						responseObj.response = JSON.parse(stdout);
 						resolve(responseObj);
 					})
@@ -141,22 +147,24 @@ handleResponse = (resObj) => {
 				resolve(_jobList)
 			} else if (source === 'CAREERJET') {
 				let resItems = res.jobs
-				resItems.forEach((item) => {
-					let jO = jobObjectHelper.template();
+				if (resItems != undefined) {
+					resItems.forEach((item) => {
+						let jO = jobObjectHelper.template();
 
-					jO.remote = 'Careerjet'
-					jO.title = item.title;
-					jO.source = item.source;
-					jO.description = DOMPurify.sanitize(item.description);
-					jO.titleLink = item.url;
-					jO.extWebsite = item.sites;
-					jO.startDate = item.date;
-					jO.location.name = item.locations;
-					jO.compensation.salary = (item.salary === '') ? null : item.salary;
+						jO.remote = 'Careerjet'
+						jO.title = item.title;
+						jO.source = item.source;
+						jO.description = DOMPurify.sanitize(item.description);
+						jO.titleLink = item.url;
+						jO.extWebsite = item.sites;
+						jO.startDate = item.date;
+						jO.location.name = item.locations;
+						jO.compensation.salary = (item.salary === '') ? null : item.salary;
 
-					_jobList.push(jO)
-				})
-				
+						_jobList.push(jO)
+					})
+				}
+
 				resolve(_jobList)
 			} else {
 				reject("Don't have a set-up for that company")
@@ -233,7 +241,7 @@ router.get('/test-call', (req, res, next) => {
 	})
 })
 
-router.get('/job-search', urlParser, (req, res, next) => {
+router.get('/jobs', urlParser, (req, res, next) => {
 	let params = req.query;
 	/* The `test` param is given in the front-end code, most
 		likely in `siteBody.js` */
@@ -246,7 +254,10 @@ router.get('/job-search', urlParser, (req, res, next) => {
 	} else {
 		let remotes = remoteData.initialRemoteData()
 		let promiseArray = [];
-		const query = 'Computers'
+		// Keywords from search query
+		let keywords = params.keywords;
+		// Query from job-search bar will be included in this query
+		const query = 'Cannabis&' + keywords.split('-').join('&');
 
 		for (var i = 0; i < Object.keys(remotes).length; i++) {
 			let source = Object.keys(remotes)[i];

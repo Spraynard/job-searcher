@@ -402,12 +402,16 @@
   }
 
   .job-entry.active .body-column-2 div {
-    font-size: 12px !important;
+    font-size: 12px;
+  }
+
+  .job-entry.active .body-column-2 div:active {
+    font-size: 10px;
   }
 
   .body-column-2 div:active {
     width: 88%;
-    font-size: 7px !important;
+    font-size: 7px;
   }
   
   .body-column-2 div:first-child {
@@ -449,12 +453,12 @@
   }
 
   .body-column-2 div {
-    font-size: 12px !important;
+    font-size: 12px;
   }
 
  .body-column-2 div:active {
     width: 88%;
-    font-size: 10px !important;
+    font-size: 10px;
   }
 }
 
